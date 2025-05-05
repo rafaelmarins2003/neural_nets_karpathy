@@ -31,8 +31,39 @@ n_before = draw_dot(o)
 
 n_before.render('grafo', view=True)
 
+# Iniciando backpropagation utilizando topological sort (basicamente tornando esse processo manual em automatico) (checar função backward() da classe Value)
+o.backward()
 
-# Iniciando a backpropagation (sair derivando pra trás...)
+
+
+
+
+"""
+# Iniciando a backpropagation com _backward() mas ainda manualmente
+
+# Definir um valor padrão diferente de 0 para que exista backpropagation, se não o grad de todos sempre vai ser 0.
+o.grad = 1.0
+
+# Agora foi definido um valor de grad em n
+o._backward()
+
+# Agora foi definido um valor ao grad dos valores que chegam a n
+n._backward()
+
+# Para um valor como b, que não tem nenhum valor que chega ele, ele é um nó 'root', simplesmente nada acontece, a variavel é definida originalmente como lambda: None
+b._backward()
+
+x1w1x2w2._backward()
+
+x1w1._backward()
+x2w2._backward()
+"""
+
+
+
+"""
+# Iniciando a backpropagation manual (sair derivando pra trás...) (Ainda não existe nada relacionado a backward na classe Value, para testar esse método,
+Remova tudo de _backward da Value
 # ----------------------------------------------------------------------------
 o.grad = 1.0
 
@@ -61,3 +92,4 @@ x2.grad = w2.data * x2w2.grad
 n_after = draw_dot(o)
 
 n_after.render('grafo', view=True)
+"""
