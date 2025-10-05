@@ -2,7 +2,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
-matplotlib.use('QtAgg')
+matplotlib.use('Agg')
 
 class Value:
 

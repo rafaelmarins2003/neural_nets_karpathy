@@ -10,9 +10,12 @@ class Neuron:
 
     def __call__(self, x):
         # w * x + b
-        act = sum((wi*xi for wi, xi in zip(self.w, self.w)), self.b)
+        act = sum((wi*xi for wi, xi in zip(self.w, x)), self.b)
         out = act.tanh()
         return out
+
+    def parameters(self):
+        return self.w + [self.b]
 
 class Layer:
     def __init__(self, nin, nout):
@@ -22,17 +25,28 @@ class Layer:
         outs = [n(x) for n in self.neurons]
         return outs[0] if len(outs) == 1 else outs
 
+    def parameters(self):
+        return [p for neuron in self.neurons for p in neuron.parameters()]
+        # params = []
+        # for neuron in self.neurons:
+        #     ps = neuron.parameters()
+        #     params.extend(ps)
+        # return params
+
 class MLP:
     def __init__(self, nin, nouts):
         sz = [nin] + nouts
-        self.layers = [Layer(sz[0], sz[1]) for _ in range(len(nouts))]
+        self.layers = [Layer(sz[i], sz[i+1]) for i in range(len(nouts))]
 
     def __call__(self, x):
         for layer in self.layers:
             x = layer(x)
         return x
 
-# Teste Neuron
+    def parameters(self):
+        return [p for layer in self.layers for p in layer.parameters()]
+
+# # Teste Neuron
 # x = [2.0]
 # n = Neuron(2)
 # print(n(x))
@@ -43,9 +57,19 @@ class MLP:
 # print(n(x))
 
 # Teste MLP
-x = [2.0, 3.0, -1.0]
-n = MLP(3, [4, 4, 1])
-print(n(x))
+# x = [2.0, 3.0, -1.0]
+# n = MLP(3, [4, 4, 1])
+# print(n(x))
 
 # Preciso corrigir algumas coisas na função atual para usar o draw_dot
 # draw_dot(n(x))
+#
+# xs = [
+#     [2.0, 3.0, -1.0],
+#     [3.0, -1.0, 0.5],
+#     [0.5, 1.0, 1.0],
+#     [1.0, 1.0, -1.0]
+# ]
+# ys = [1.0, -1.0, -1.0, 1.0]
+# n = MLP(3, [4, 4, 1])
+# ypred = [n(x) for x in xs]
