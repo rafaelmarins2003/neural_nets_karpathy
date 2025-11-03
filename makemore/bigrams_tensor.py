@@ -1,15 +1,14 @@
 import torch, numpy as np, matplotlib.pyplot as plt
 words = open('makemore/names.txt', 'r').read().splitlines()
 
-N = torch.zeros((28, 28), dtype=torch.int32)
+N = torch.zeros((27, 27), dtype=torch.int32)
 
 chars = sorted(list(set(''.join(words))))
-stoi = {s:i for i,s in enumerate(chars)}
-stoi['<S>'] = 26
-stoi['<E>'] = 27
+stoi = {s:i+1 for i,s in enumerate(chars)}
+stoi['.'] = 0
 
 for w in words:
-    chs = ['<S>'] + list(w) + ['<E>']
+    chs = ['.'] + list(w) + ['.']
     for ch1, ch2 in zip(chs, chs[1:]):
         ix1 = stoi[ch1]
         ix2 = stoi[ch2]
@@ -32,3 +31,28 @@ plt.yticks(range(V), [itos[i] for i in range(V)])
 plt.tight_layout()
 plt.axis('off')
 plt.show()
+
+# p = N[0].float()
+# p = p / p.sum()
+# print(p)
+#
+# g = torch.Generator().manual_seed(2147483647)
+# p = torch.rand(3, generator=g)
+# p = p / p.sum()
+# print(p)
+#
+# torch.multinomial(p, num_samples=20, replacement=True, generator=g)
+
+g = torch.Generator().manual_seed(2147483647)
+
+for i in range(10):
+    out = []
+    ix = 0
+    while True:
+        p = N[ix].float()
+        p = p / p.sum()
+        ix = torch.multinomial(p, num_samples=1, replacement=True, generator=g).item()
+        out.append(itos[ix])
+        if ix == 0:
+            break
+    print(''.join(out))
