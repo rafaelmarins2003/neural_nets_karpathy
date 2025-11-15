@@ -43,14 +43,21 @@ plt.show()
 #
 # torch.multinomial(p, num_samples=20, replacement=True, generator=g)
 
+P = N.float()
+# P = P / P.sum()
+# Precisamos fazer a divisão não pela soma total da matriz, mas pela soma de cada linha da matriz, ou seja, o sum deve retornar uma lista com 27 somas de linha, não uma soma total de toda a matriz.
+P /= P.sum(1, keepdims=True)
+
+
 g = torch.Generator().manual_seed(2147483647)
 
-for i in range(10):
+for i in range(5):
     out = []
     ix = 0
     while True:
-        p = N[ix].float()
-        p = p / p.sum()
+        p = P[ix]
+        # p = N[ix].float()
+        # p = p / p.sum()
         ix = torch.multinomial(p, num_samples=1, replacement=True, generator=g).item()
         out.append(itos[ix])
         if ix == 0:
