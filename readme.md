@@ -29,4 +29,3 @@ Registrar e organizar os conceitos, implementações e experimentos estudados ao
 
 Este projeto não tem objetivo de uso em produção.  
 É apenas um espaço de aprendizado, experimentação e documentação pessoal.
-
